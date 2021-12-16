@@ -1,0 +1,261 @@
+127.0.0.1:6379> SET Book:1 "Os Lusíadas"
+OK
+127.0.0.1:6379> GET Book:1
+"Os Lus\xc3\xadadas"
+127.0.0.1:6379> SET Book:1:Poetry 1
+OK
+127.0.0.1:6379> GET Book:1:Poetry
+"1"
+127.0.0.1:6379> GET Book:1
+"Os Lus\xc3\xadadas"
+127.0.0.1:6379> INCR Book:1:Poetry
+(integer) 2
+127.0.0.1:6379> GET Book:1:Poetry
+"2"
+127.0.0.1:6379> INCRBY Book:1:Poetry 20
+(integer) 22
+127.0.0.1:6379> GET Book:1:Poetry
+"22"
+127.0.0.1:6379> DECRBY Book:1:Poetry 2
+(integer) 20
+127.0.0.1:6379> GET Book:1:Poetry
+"20"
+127.0.0.1:6379> INCR Book:1 "Os Lusiadas"
+(error) ERR wrong number of arguments for 'incr' command
+127.0.0.1:6379> MSET Person:2 "Kurt Vonnegut" Person:3 "Jane Austen" Person:4 "Mark Twain"
+OK
+127.0.0.1:6379> MGET Person:2 Person:3 Person:4
+1) "Kurt Vonnegut"
+2) "Jane Austen"
+3) "Mark Twain"
+127.0.0.1:6379> LPUSH Book:1:comment "This was a fun read"
+(integer) 1
+127.0.0.1:6379> LRANGE Book:1:comment 0 -1
+1) "This was a fun read"
+127.0.0.1:6379> LPUSH Book:1:comment "Way too long!"
+(integer) 2
+127.0.0.1:6379> LRANGE Book:1:comment 0 -1
+1) "Way too long!"
+2) "This was a fun read"
+127.0.0.1:6379> RPUSH Book:1:comment "Tennis anyone?"
+(integer) 3
+127.0.0.1:6379> LRANGE Book:1:comment 0 -1
+1) "Way too long!"
+2) "This was a fun read"
+3) "Tennis anyone?"
+127.0.0.1:6379> LPOP Book:1:comment
+"Way too long!"
+127.0.0.1:6379> LRANGE Book:1:comment 0 -1
+1) "This was a fun read"
+2) "Tennis anyone?"
+127.0.0.1:6379> RPOP Book:1:comment
+"Tennis anyone?"
+127.0.0.1:6379> LRANGE Book:1:comment 0 -1
+1) "This was a fun read"
+127.0.0.1:6379> RPUSH Organization:1:members Person:1 Person:2 Person:3 Person:4
+(integer) 4
+127.0.0.1:6379> LRANGE Organization:1:members 0 -1
+1) "Person:1"
+2) "Person:2"
+3) "Person:3"
+4) "Person:4"
+127.0.0.1:6379> LTRIM Organization:1:members 0 2
+OK
+127.0.0.1:6379> LRANGE Organazition:1:members 0 -1
+(empty list or set)
+127.0.0.1:6379> LRANGE Organization:1:members 0 -1
+1) "Person:1"
+2) "Person:2"
+3) "Person:3"
+127.0.0.1:6379> BRPOP Organization:1:members 5
+1) "Organization:1:members"
+2) "Person:3"
+127.0.0.1:6379> LRANGE Organization:1:members 0 -1
+1) "Person:1"
+2) "Person:2"
+127.0.0.1:6379> HSET Book:3 name "Cats Cradle"
+(integer) 1
+127.0.0.1:6379> HGET Book:3 name
+"Cats Cradle"
+127.0.0.1:6379> HMSET Book:4 name "Slaughterhouse-Five" author "Kurt Vonnegut" copyrightYear 1969 ISBN 29960763
+OK
+127.0.0.1:6379> HMGET Book:4 author ISBN
+1) "Kurt Vonnegut"
+2) "29960763"
+127.0.0.1:6379> HMGET Book:4 author copyrightYear
+1) "Kurt Vonnegut"
+2) "1969"
+127.0.0.1:6379> HGETALL Book:4
+1) "name"
+2) "Slaughterhouse-Five"
+3) "author"
+4) "Kurt Vonnegut"
+5) "copyrightYear"
+6) "1969"
+7) "ISBN"
+8) "29960763"
+127.0.0.1:6379> HEXISTS Book:4 copyrightYear
+(integer) 1
+127.0.0.1:6379> HEXISTS Book:4 adasdsa
+(integer) 0
+127.0.0.1:6379> HLEN Book:4
+(integer) 4
+127.0.0.1:6379> HKEYS Book:4
+1) "name"
+2) "author"
+3) "copyrightYear"
+4) "ISBN"
+127.0.0.1:6379> HDEL Book:4 copyrightYear
+(integer) 1
+127.0.0.1:6379> HGETALL Book:4
+1) "name"
+2) "Slaughterhouse-Five"
+3) "author"
+4) "Kurt Vonnegut"
+5) "ISBN"
+6) "29960763"
+127.0.0.1:6379> HSET Book:4 copyrightYear 1968
+(integer) 1
+127.0.0.1:6379> HGETALL Book:4
+1) "name"
+2) "Slaughterhouse-Five"
+3) "author"
+4) "Kurt Vonnegut"
+5) "ISBN"
+6) "29960763"
+7) "copyrightYear"
+8) "1968"
+127.0.0.1:6379> HINCRBY Book:4 copyrightYear 1
+(integer) 1969
+127.0.0.1:6379> HGET Book:4 copyrightYear
+"1969"
+127.0.0.1:6379> HDCRBY Book:4 copyrightYear 1
+(error) ERR unknown command `HDCRBY`, with args beginning with: `Book:4`, `copyrightYear`, `1`, 
+127.0.0.1:6379> SET Organization:5 "Beatles"
+OK
+127.0.0.1:6379> SADD Organization:5:member Paul John George Ringo
+(integer) 4
+127.0.0.1:6379> SMEMBERS Organization:5:member
+1) "John"
+2) "Ringo"
+3) "George"
+4) "Paul"
+127.0.0.1:6379> SISMEMBER Organization:5:member "John"
+(integer) 1
+127.0.0.1:6379> SISMEMBER Organization:5:member "Ralph"
+(integer) 0
+127.0.0.1:6379> SCARD Organization:5:member
+(integer) 4
+127.0.0.1:6379> SET Organization:6 "Wings"
+OK
+127.0.0.1:6379> SET Organization:7 "Traveling Wilburys"
+OK
+127.0.0.1:6379> SADD Organization:6:members Paul Linda Denny
+(integer) 3
+127.0.0.1:6379> SADD Organization:7:members Bob George Jeff Roy Tom
+(integer) 5
+127.0.0.1:6379> SUNION Organization:5:members Organization:6:members
+1) "Linda"
+2) "Denny"
+3) "Paul"
+127.0.0.1:6379> SUNION Organization:5:member Organization:6:members
+1) "George"
+2) "Paul"
+3) "Ringo"
+4) "Linda"
+5) "John"
+6) "Denny"
+127.0.0.1:6379> SUNION Organization:6:members Organization:7:members
+1) "Jeff"
+2) "Tom"
+3) "George"
+4) "Paul"
+5) "Denny"
+6) "Linda"
+7) "Roy"
+8) "Bob"
+127.0.0.1:6379> UNION Organization:5:member Organization:6:members Organization:8
+(error) ERR unknown command `UNION`, with args beginning with: `Organization:5:member`, `Organization:6:members`, `Organization:8`, 
+127.0.0.1:6379> SUNION Organization:5:member Organization:6:members Organization:8
+
+1) "George"
+2) "Paul"
+3) "Ringo"
+4) "Linda"
+5) "John"
+6) "Denny"
+127.0.0.1:6379> SINTER Organization:5:member Organization:6:member
+(empty list or set)
+127.0.0.1:6379> SINTER Organization:5:member Organization:6:members
+1) "Paul"
+127.0.0.1:6379> SINTER Organization:5:member Organization:7:members
+1) "George"
+127.0.0.1:6379> SDIFF Organization:5:member Organization:6:members
+1) "John"
+2) "Ringo"
+3) "George"
+127.0.0.1:6379> SDIFF Organization:6:members Organization:7:members
+1) "Linda"
+2) "Denny"
+3) "Paul"
+127.0.0.1:6379> ZADD copyrightYear 1996 Book:1 2014 Book:2 1963 Book:3
+(integer) 3
+127.0.0.1:6379> ZADD copyrightYear 1969 Book:4
+(integer) 1
+127.0.0.1:6379> ZRANGE copyrightYear 0 -1
+1) "Book:3"
+2) "Book:4"
+3) "Book:1"
+4) "Book:2"
+127.0.0.1:6379> ZRANGE copyrightYear 0 -1 WITHSCORES
+1) "Book:3"
+2) "1963"
+3) "Book:4"
+4) "1969"
+5) "Book:1"
+6) "1996"
+7) "Book:2"
+8) "2014"
+127.0.0.1:6379> ZREVRANGE copyrightYear 0 -1
+1) "Book:2"
+2) "Book:1"
+3) "Book:4"
+4) "Book:3"
+127.0.0.1:6379> ZREVRANGE copyrightYear 0 -1 WITHSCORES
+1) "Book:2"
+2) "2014"
+3) "Book:1"
+4) "1996"
+5) "Book:4"
+6) "1969"
+7) "Book:3"
+8) "1963"
+127.0.0.1:6379> SET Movie:1 "Blade Runner"
+OK
+127.0.0.1:6379> HSET Movie:2 name "Star Wars"
+(integer) 1
+127.0.0.1:6379> SADD Movie:3 "2001 a Space Odyssey"
+(integer) 1
+127.0.0.1:6379> SETBIT Movie:UserPlays:2014-12-11 2 1
+(integer) 0
+127.0.0.1:6379> GETBIT Movie:UserPlays:2014-12-11 2
+(integer) 1
+127.0.0.1:6379> GETBIT Movie:UserPlays:2014-12-11 2
+(integer) 1
+127.0.0.1:6379> GETBIT Movie:UserPlays:2014-12-11 2
+(integer) 1
+127.0.0.1:6379> PFADD EducationEvent:1:attendee Person:1 Person:2 Person:3 Person:44556
+(integer) 1
+127.0.0.1:6379> PFCOUNT EducationEvent:1:attendee
+(integer) 4
+127.0.0.1:6379> PFADD LiteraryEvent:1:attendee Person:4 Person:1
+(integer) 1
+127.0.0.1:6379> PFMERGE Event:attendee EducationEvent:1:attendee LiteraryEvent:1:attendee
+OK
+127.0.0.1:6379> PFCOUNT Event:atendee
+(integer) 0
+127.0.0.1:6379> PFCOUNT Event:attendee
+(integer) 5
+127.0.0.1:6379> 
+
+

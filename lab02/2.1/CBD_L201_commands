@@ -1,0 +1,571 @@
+tomascandeias@Ubuntu:~/Desktop/CBD/lab02$ mongosh
+Current Mongosh Log ID:	617a7ef7f08d3861afbe577b
+Connecting to:		mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000
+Using MongoDB:		5.0.3
+Using Mongosh:		1.1.0
+
+For mongosh info see: https://docs.mongodb.com/mongodb-shell/
+
+
+To help improve our products, anonymous usage data is collected and sent to MongoDB periodically (https://www.mongodb.com/legal/privacy-policy).
+You can opt-out by running the disableTelemetry() command.
+
+------
+   The server generated these startup warnings when booting:
+   2021-10-28T11:42:48.097+01:00: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine. See http://dochub.mongodb.org/core/prodnotes-filesystem
+   2021-10-28T11:42:48.830+01:00: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+   2021-10-28T11:42:48.830+01:00: This server is bound to localhost. Remote systems will be unable to connect to this server. Start the server with --bind_ip <address> to specify which IP addresses it should serve responses from, or with --bind_ip_all to bind to all interfaces. If this behavior is desired, start the server with --bind_ip 127.0.0.1 to disable this warning
+   2021-10-28T11:42:48.830+01:00: Soft rlimits for open file descriptors too low
+------
+
+Warning: Found ~/.mongorc.js, but not ~/.mongoshrc.js. ~/.mongorc.js will not be loaded.
+  You may want to copy or rename ~/.mongorc.js to ~/.mongoshrc.js.
+test> show dbs
+admin     41 kB
+config  12.3 kB
+local   73.7 kB
+test> show dbs
+admin     41 kB
+config  12.3 kB
+local   73.7 kB
+test> use mydb
+switched to db mydb
+mydb> db
+mydb
+mydb> show dbs
+admin     41 kB
+config  12.3 kB
+local   73.7 kB
+mydb> db.movie.insert({"name": "tomas"})
+DeprecationWarning: Collection.insert() is deprecated. Use insertOne, insertMany, or bulkWrite.
+{
+  acknowledged: true,
+  insertedIds: { '0': ObjectId("617a7f2ad39c817eb054c270") }
+}
+mydb> show dbs
+admin     41 kB
+config  12.3 kB
+local   73.7 kB
+mydb    8.19 kB
+mydb> db.dropDatabase()
+{ ok: 1, dropped: 'mydb' }
+mydb> show dbs
+admin     41 kB
+config  12.3 kB
+local   73.7 kB
+mydb> use test
+switched to db test
+test> db.createCollection("mycollection")
+{ ok: 1 }
+test> show collections 
+mycollection
+test> db.createCollection("mycol", { capped : true, autoIndexID : true, size : 6142800, max : 10000 } ){
+Uncaught:
+SyntaxError: Missing semicolon. (1:97)
+
+> 1 | db.createCollection("mycol", { capped : true, autoIndexID : true, size : 6142800, max : 10000 } ){
+    |                                                                                                  ^
+  2 |
+
+test> "ok" : 0,
+Uncaught:
+SyntaxError: Missing semicolon. (1:4)
+
+> 1 | "ok" : 0,
+    |     ^
+  2 |
+
+test> "errmsg" : "BSON field 'create.autoIndexID' is an unknown field.",
+Uncaught:
+SyntaxError: Missing semicolon. (1:8)
+
+> 1 | "errmsg" : "BSON field 'create.autoIndexID' is an unknown field.",
+    |         ^
+  2 |
+
+test> "code" : 40415,
+Uncaught:
+SyntaxError: Missing semicolon. (1:6)
+
+> 1 | "code" : 40415,
+    |       ^
+  2 |
+
+test> "codeName" : "Location40415"
+Uncaught:
+SyntaxError: Missing semicolon. (1:10)
+
+> 1 | "codeName" : "Location40415"
+    |           ^
+  2 |
+
+test> }db.createCollection("mycol", { capped : true, autoIndexID : true, size : 6142800, max : 10000 } )
+Uncaught:
+SyntaxError: Unexpected token (1:0)
+
+> 1 | }db.createCollection("mycol", { capped : true, autoIndexID : true, size : 6142800, max : 10000 } )
+    | ^
+  2 |
+
+test> show collections
+mycollection
+test> }db.createCollection("mycol", { capped: true, autoIndexID: true, size: '6142800', max:'10000'})
+Uncaught:
+SyntaxError: Unexpected token (1:0)
+
+> 1 | }db.createCollection("mycol", { capped: true, autoIndexID: true, size: '6142800', max:'10000'})
+    | ^
+  2 |
+
+test> }db.createCollection("mycol", { capped : true, autoIndexID : true, size : 6142800, max : 10000 } ){"ok":0, "errmsg" : "BSON field 'create.autoIndexID' is an unknown field.",}
+Uncaught:
+SyntaxError: Unexpected token (1:0)
+
+> 1 | }db.createCollection("mycol", { capped : true, autoIndexID : true, size : 6142800, max : 10000 } ){"ok":0, "errmsg" : "BSON field 'create.autoIndexID' is an unknown field.",}
+    | ^
+  2 |
+
+test> db.createCollection("log", { capped : true, size : 5242880, max : 5000 } ) 
+{ ok: 1 }
+test> show collections
+log
+mycollection
+test> db.tutorialspoint.insert({"name" : "tutorialspoint"}),
+... WriteResult({"nInserted": 1})
+ReferenceError: WriteResult is not defined
+test> show collections
+log
+mycollection
+tutorialspoint
+test> db.tutorialspoint.insert({"name" : "tutorialspoint"}),
+... WriteResult({ "nInserted" : 1 })
+ReferenceError: WriteResult is not defined
+test> db.tutorialspoint.insert({ "name": "tutorialspoint" }), WriteResult({ "nInserted": 1 })
+ReferenceError: WriteResult is not defined
+test> db.tutorialspoint.insert({ "name": "tutorialspoint" }), writeResult({ "nInserted": 1 })
+ReferenceError: writeResult is not defined
+test> show collections
+log
+mycollection
+tutorialspoint
+test> db.tutorialspoint.drop()
+true
+test> show collections
+log
+mycollection
+test> db.log.drop()
+true
+test> db.mycollection.insert({
+... _id : ObjectId("507f191e810c19729de860ea"),
+... ... title: "MongoDB Overview",
+Uncaught:
+SyntaxError: Unexpected token, expected "," (3:9)
+
+  1 | db.mycollection.insert({
+  2 | _id : ObjectId("507f191e810c19729de860ea"),
+> 3 | ... title: "MongoDB Overview",
+    |          ^
+  4 |
+
+test> ... description: "MongoDB is no sql database",
+Uncaught:
+SyntaxError: Unexpected token (1:0)
+
+> 1 | ... description: "MongoDB is no sql database",
+    | ^
+  2 |
+
+test> ... by: "tutorials point",
+Uncaught:
+SyntaxError: Unexpected token (1:0)
+
+> 1 | ... by: "tutorials point",
+    | ^
+  2 |
+
+test> ... url: "http://www.tutorialspoint.com",
+Uncaught:
+SyntaxError: Unexpected token (1:0)
+
+> 1 | ... url: "http://www.tutorialspoint.com",
+    | ^
+  2 |
+
+test> ... tags: ['mongodb', 'database', 'NoSQL'],
+Uncaught:
+SyntaxError: Unexpected token (1:0)
+
+> 1 | ... tags: ['mongodb', 'database', 'NoSQL'],
+    | ^
+  2 |
+
+test> db.mycollection.insert({ _id : ObjectId("507f191e810c19729de860ea"), ... title: "MongoDB Overview",
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:78)
+
+> 1 | db.mycollection.insert({ _id : ObjectId("507f191e810c19729de860ea"), ... title: "MongoDB Overview",
+    |                                                                               ^
+  2 |
+
+test> db.mycollection.insert({
+... _id : ObjectId("507f191e810c19729de860ea"),
+... title: "MongoDB Overview",
+... likes:155,
+... })
+{
+  acknowledged: true,
+  insertedIds: { '0': ObjectId("507f191e810c19729de860ea") }
+}
+test> show collections
+mycollection
+test> db.createCollection("mycol")
+{ ok: 1 }
+test> db.mycol.insertOne({"name":"tomas", "age":21})
+{
+  acknowledged: true,
+  insertedId: ObjectId("617a84bdd39c817eb054c275")
+}
+test> db.mycol.find({},"name":"tomas")
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:23)
+
+> 1 | db.mycol.find({},"name":"tomas")
+    |                        ^
+  2 |
+
+test> db.mycol.find({},{"name":"tomas"})
+[ { _id: ObjectId("617a84bdd39c817eb054c275"), name: 'tomas' } ]
+test> db.mycol.find({},{"name":"tomas", "age":22})
+[
+  { _id: ObjectId("617a84bdd39c817eb054c275"), age: 21, name: 'tomas' }
+]
+test> db.mycol.find({},{"name":"tomas", "age":21})
+[
+  { _id: ObjectId("617a84bdd39c817eb054c275"), age: 21, name: 'tomas' }
+]
+test> db.mycol.find().pretty()
+[
+  { _id: ObjectId("617a84bdd39c817eb054c275"), name: 'tomas', age: 21 }
+]
+test> db.mycol.find()
+[
+  { _id: ObjectId("617a84bdd39c817eb054c275"), name: 'tomas', age: 21 }
+]
+test> db.mycol.insertOne({"name":"andre","age":22})
+{
+  acknowledged: true,
+  insertedId: ObjectId("617a859fd39c817eb054c276")
+}
+test> db.mycol.find()
+[
+  { _id: ObjectId("617a84bdd39c817eb054c275"), name: 'tomas', age: 21 },
+  { _id: ObjectId("617a859fd39c817eb054c276"), name: 'andre', age: 22 }
+]
+test> db.mycol.find().pretty()
+[
+  { _id: ObjectId("617a84bdd39c817eb054c275"), name: 'tomas', age: 21 },
+  { _id: ObjectId("617a859fd39c817eb054c276"), name: 'andre', age: 22 }
+]
+test> db.mycol.find({},{"name":"tomas", "age":22})
+[
+  { _id: ObjectId("617a84bdd39c817eb054c275"), age: 21, name: 'tomas' },
+  { _id: ObjectId("617a859fd39c817eb054c276"), age: 22, name: 'tomas' }
+]
+test> db.mycol.find({},{"name":"tomas", "age":21})
+[
+  { _id: ObjectId("617a84bdd39c817eb054c275"), age: 21, name: 'tomas' },
+  { _id: ObjectId("617a859fd39c817eb054c276"), age: 22, name: 'tomas' }
+]
+test> db.mycol.find().pretty()
+[
+  { _id: ObjectId("617a84bdd39c817eb054c275"), name: 'tomas', age: 21 },
+  { _id: ObjectId("617a859fd39c817eb054c276"), name: 'andre', age: 22 }
+]
+test> db.mycol.find({},{"name":"tomas", "age":21})
+[
+  { _id: ObjectId("617a84bdd39c817eb054c275"), age: 21, name: 'tomas' },
+  { _id: ObjectId("617a859fd39c817eb054c276"), age: 22, name: 'tomas' }
+]
+test> db.mycol.find({},{"name":"tomas", "age":21, "_id":0})
+[ { age: 21, name: 'tomas' }, { age: 22, name: 'tomas' } ]
+test> db.mycol.find({},{name:"tomas", age:21, _id:0})
+[ { age: 21, name: 'tomas' }, { age: 22, name: 'tomas' } ]
+test> db.mycol.find({},{name:"tomas", age:21})
+[
+  { _id: ObjectId("617a84bdd39c817eb054c275"), age: 21, name: 'tomas' },
+  { _id: ObjectId("617a859fd39c817eb054c276"), age: 22, name: 'tomas' }
+]
+test> db.mycol.find({},{name:"tomas"})
+[
+  { _id: ObjectId("617a84bdd39c817eb054c275"), name: 'tomas' },
+  { _id: ObjectId("617a859fd39c817eb054c276"), name: 'tomas' }
+]
+test> db.mycol.find()
+[
+  { _id: ObjectId("617a84bdd39c817eb054c275"), name: 'tomas', age: 21 },
+  { _id: ObjectId("617a859fd39c817eb054c276"), name: 'andre', age: 22 }
+]
+test> db.mycol.find({},{name:"tomas", _id: 0})
+[ { name: 'tomas' }, { name: 'tomas' } ]
+test> db.mycol.find({},{name:1, _id: 0})
+[ { name: 'tomas' }, { name: 'andre' } ]
+test> db.mycol.findOne({nome:"tomas"})
+null
+test> db.mycol.find()
+[
+  { _id: ObjectId("617a84bdd39c817eb054c275"), name: 'tomas', age: 21 },
+  { _id: ObjectId("617a859fd39c817eb054c276"), name: 'andre', age: 22 }
+]
+test> db.mycol.findOne({nome:"tomas"})
+null
+test> db.mycol.findOne({name:"tomas"})
+{ _id: ObjectId("617a84bdd39c817eb054c275"), name: 'tomas', age: 21 }
+test> db.mycol.insertOne({"name":"tomas2","age":21})
+{
+  acknowledged: true,
+  insertedId: ObjectId("617a873cd39c817eb054c277")
+}
+test> db.mycol.find({$and:[{"age":21}]}).pretty()
+[
+  { _id: ObjectId("617a84bdd39c817eb054c275"), name: 'tomas', age: 21 },
+  {
+    _id: ObjectId("617a873cd39c817eb054c277"),
+    name: 'tomas2',
+    age: 21
+  }
+]
+test> db.mycol.find({$nor:[{"age":21}]}).pretty()
+[
+  { _id: ObjectId("617a859fd39c817eb054c276"), name: 'andre', age: 22 }
+]
+test> db.mycol.update({"name":"tomas2"},{$set:{"name:t2"}})
+Uncaught:
+SyntaxError: Unexpected token (1:50)
+
+> 1 | db.mycol.update({"name":"tomas2"},{$set:{"name:t2"}})
+    |                                                   ^
+  2 |
+
+test> db.mycol.update({"name":"tomas2"},{$set:{"name:t2"}}, {multi:true})
+Uncaught:
+SyntaxError: Unexpected token (1:50)
+
+> 1 | db.mycol.update({"name":"tomas2"},{$set:{"name:t2"}}, {multi:true})
+    |                                                   ^
+  2 |
+
+test> db.mycol.update({"name":"tomas2"},{$set:{"name":"t2"}}, {multi:true})
+DeprecationWarning: Collection.update() is deprecated. Use updateOne, updateMany, or bulkWrite.
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+test> db.mycol.find().pretty()
+[
+  { _id: ObjectId("617a84bdd39c817eb054c275"), name: 'tomas', age: 21 },
+  { _id: ObjectId("617a859fd39c817eb054c276"), name: 'andre', age: 22 },
+  { _id: ObjectId("617a873cd39c817eb054c277"), name: 't2', age: 21 }
+]
+test> show collections
+mycol
+mycollection
+test> db.mycollection.find()
+[
+  {
+    _id: ObjectId("507f191e810c19729de860ea"),
+    title: 'MongoDB Overview',
+    likes: 155
+  }
+]
+test> db.mycol.find().pretty()
+[
+  { _id: ObjectId("617a84bdd39c817eb054c275"), name: 'tomas', age: 21 },
+  { _id: ObjectId("617a859fd39c817eb054c276"), name: 'andre', age: 22 },
+  { _id: ObjectId("617a873cd39c817eb054c277"), name: 't2', age: 21 }
+]
+test> db.mycol.save({_id:"617a873cd39c817eb054c277", "name":"t2", "by":"afonso"})
+MongoshInvalidInputError: Collection.save() is deprecated. Use insertOne, insertMany, updateOne, or updateMany.
+test> db.mycol.saveOne({_id:"617a873cd39c817eb054c277", "name":"t2", "by":"afonso"})
+TypeError: db.mycol.saveOne is not a function
+test> db.mycol.findOneAndUpdate({name:"t2"},{$set:{name:"afonso", age:22}})
+{ _id: ObjectId("617a873cd39c817eb054c277"), name: 't2', age: 21 }
+test> db.mycol.remove({"name":"afonso"})
+DeprecationWarning: Collection.remove() is deprecated. Use deleteOne, deleteMany, findOneAndDelete, or bulkWrite.
+{ acknowledged: true, deletedCount: 1 }
+test> db.mycol.find()
+[
+  { _id: ObjectId("617a84bdd39c817eb054c275"), name: 'tomas', age: 21 },
+  { _id: ObjectId("617a859fd39c817eb054c276"), name: 'andre', age: 22 }
+]
+test> db.mycol.insertOne({"name":"afonso","age":22})
+{
+  acknowledged: true,
+  insertedId: ObjectId("617a8dcdd39c817eb054c278")
+}
+test> db.mycol.find()
+[
+  { _id: ObjectId("617a84bdd39c817eb054c275"), name: 'tomas', age: 21 },
+  { _id: ObjectId("617a859fd39c817eb054c276"), name: 'andre', age: 22 },
+  {
+    _id: ObjectId("617a8dcdd39c817eb054c278"),
+    name: 'afonso',
+    age: 22
+  }
+]
+test> db.mycol.find({},{"name":1,_id:0})
+[ { name: 'tomas' }, { name: 'andre' }, { name: 'afonso' } ]
+test> db.mycol.find({},{"name":1,_id:0}).limit(2)
+[ { name: 'tomas' }, { name: 'andre' } ]
+test> db.mycol.find({},{"name":1,_id:0}).limit(2).skip(1)
+[ { name: 'andre' }, { name: 'afonso' } ]
+test> db.mycol.find({},{"name":1,_id:0}).sort({"name":-1})
+[ { name: 'tomas' }, { name: 'andre' }, { name: 'afonso' } ]
+test> db.mycol.createIndex({"name":1})
+name_1
+test> db.mycol.dropIndex({"name":1})
+{ nIndexesWas: 2, ok: 1 }
+test> db.aggrCol.insertMany({
+...    _id: ObjectId(7df78ad8902c)
+Uncaught:
+SyntaxError: Identifier directly after number. (2:18)
+
+  1 | db.aggrCol.insertMany({
+> 2 |    _id: ObjectId(7df78ad8902c)
+    |                   ^
+  3 |
+
+test>    title: 'MongoDB Overview', 
+...    description: 'MongoDB is no sql database',
+Uncaught:
+SyntaxError: Missing semicolon. (2:14)
+
+  1 |    title: 'MongoDB Overview', 
+> 2 |    description: 'MongoDB is no sql database',
+    |               ^
+  3 |
+
+test>    by_user: 'tutorials point',
+...    url: 'http://www.tutorialspoint.com',
+Uncaught:
+SyntaxError: Missing semicolon. (2:6)
+
+  1 |    by_user: 'tutorials point',
+> 2 |    url: 'http://www.tutorialspoint.com',
+    |       ^
+  3 |
+
+test>    tags: ['mongodb', 'database', 'NoSQL'],
+...    likes: 100
+Uncaught:
+SyntaxError: Missing semicolon. (2:8)
+
+  1 |    tags: ['mongodb', 'database', 'NoSQL'],
+> 2 |    likes: 100
+    |         ^
+  3 |
+
+test> },
+Uncaught:
+SyntaxError: Unexpected token (1:0)
+
+> 1 | },
+    | ^
+  2 |
+
+test> {
+...    _id: ObjectId(7df78ad8902d)
+Uncaught:
+SyntaxError: Identifier directly after number. (2:18)
+
+  1 | {
+> 2 |    _id: ObjectId(7df78ad8902d)
+    |                   ^
+  3 |
+
+test>    title: 'NoSQL Overview', 
+...    description: 'No sql database is very fast',
+Uncaught:
+SyntaxError: Missing semicolon. (2:14)
+
+  1 |    title: 'NoSQL Overview', 
+> 2 |    description: 'No sql database is very fast',
+    |               ^
+  3 |
+
+test>    by_user: 'tutorials point',
+...    url: 'http://www.tutorialspoint.com',
+Uncaught:
+SyntaxError: Missing semicolon. (2:6)
+
+  1 |    by_user: 'tutorials point',
+> 2 |    url: 'http://www.tutorialspoint.com',
+    |       ^
+  3 |
+
+test>    tags: ['mongodb', 'database', 'NoSQL'],
+...    likes: 10
+Uncaught:
+SyntaxError: Missing semicolon. (2:8)
+
+  1 |    tags: ['mongodb', 'database', 'NoSQL'],
+> 2 |    likes: 10
+    |         ^
+  3 |
+
+test> },
+Uncaught:
+SyntaxError: Unexpected token (1:0)
+
+> 1 | },
+    | ^
+  2 |
+
+test> {
+...    _id: ObjectId(7df78ad8902e)
+Uncaught:
+SyntaxError: Identifier directly after number. (2:18)
+
+  1 | {
+> 2 |    _id: ObjectId(7df78ad8902e)
+    |                   ^
+  3 |
+
+test>    title: 'Neo4j Overview', 
+...    description: 'Neo4j is no sql database',
+Uncaught:
+SyntaxError: Missing semicolon. (2:14)
+
+  1 |    title: 'Neo4j Overview', 
+> 2 |    description: 'Neo4j is no sql database',
+    |               ^
+  3 |
+
+test>    by_user: 'Neo4j',
+...    url: 'http://www.neo4j.com',
+Uncaught:
+SyntaxError: Missing semicolon. (2:6)
+
+  1 |    by_user: 'Neo4j',
+> 2 |    url: 'http://www.neo4j.com',
+    |       ^
+  3 |
+
+test>    tags: ['neo4j', 'database', 'NoSQL'],
+...    likes: 750
+Uncaught:
+SyntaxError: Missing semicolon. (2:8)
+
+  1 |    tags: ['neo4j', 'database', 'NoSQL'],
+> 2 |    likes: 750
+    |         ^
+  3 |
+
+test> },
+Uncaught:
+SyntaxError: Unexpected token (1:0)
+
+> 1 | },
+    | ^

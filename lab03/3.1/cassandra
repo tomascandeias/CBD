@@ -1,0 +1,173 @@
+Start: sudo service cassandra start 
+Stop: sudo service cassandra stop
+
+Strategy name				   |	Description
+------------------------------------------------------------------------
+Simple Strategy'				Specifies a simple replication factor for the cluster.
+Network Topology Strategy		Using this option, you can set the replication factor for each data-center independently.
+Old Network Topology Strategy	This is a legacy replication strategy.
+
+Data types |	Constant	   |	Description
+------------------------------------------------------------------------
+ascii		strings				Represents ASCII character string
+bigint		bigint				Represents 64-bit signed long
+blob		blobs				Represents arbitrary bytes
+Boolean		booleans			Represents true or false
+counter		integers			Represents counter column
+decimal		integers, floats	Represents variable-precision decimal
+double		integers			Represents 64-bit IEEE-754 floating point
+float		integers, floats	Represents 32-bit IEEE-754 floating point
+inet		strings				Represents an IP address, IPv4 or IPv6
+int			integers			Represents 32-bit signed int
+text		strings				Represents UTF8 encoded string
+timestamp	integers, strings	Represents a timestamp
+timeuuid	uuids				Represents type 1 UUID
+uuid		uuids				Represents type 1 or type 4
+								UUID
+varchar		strings				Represents uTF8 encoded string
+varint		integers			Represents arbitrary-precision integer
+
+
+Collection 	   |	Description
+-----------------------------------------------------------------------
+list			A list is a collection of one or more ordered elements.
+map				A map is a collection of key-value pairs.
+set				A set is a collection of one or more elements.
+
+
+
+
+ITERAÇÕES (cqlsh):
+
+/*
+    KEYSPACE OPERATIONS
+*/
+-- CREATE keyspace
+CREATE KEYSPACE tutorialspoint WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 3};
+DESCRIBE keyspaces;
+
+CREATE KEYSPACE test WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy', 'datacenter1' : 3 } AND DURABLE_WRITES = false;
+SELECT * FROM system_schema.keyspaces;
+
+-- USE tutorialspoint schema
+USE tutorialspoint;
+
+-- CHANGE keyspace tutorialspoint, class = NetworkTopologyStrategy
+ALTER KEYSPACE tutorialspoint WITH replication = {'class': 'NetworkTopologyStrategy', 'replication_factor': 3};
+SELECT * FROM system_schema.keyspaces;
+
+-- CHANGE keyspace test, durable_writes = true
+ALTER KEYSPACE test WITH replication = {'class': 'NetworkTopologyStrategy', 'datacenter1': 3} AND durable_writes = true;
+SELECT * FROM system_schema.keyspaces;
+
+-- DROP keyspace
+DROP KEYSPACE tutorialspoint;
+DESCRIBE keyspaces;
+
+
+/*
+    TABLE OPERATIONS
+ */
+
+-- CREATE table
+USE tutorialspoint;
+CREATE TABLE emp(
+   emp_id int PRIMARY KEY,
+   emp_name text,
+   emp_city text,
+   emp_sal varint,
+   emp_phone varint
+);
+select * from emp;
+
+-- ALTER table, add field
+ALTER TABLE emp add emp_email text;
+select * from emp;
+
+-- ALTER table, drop field
+alter table emp drop emp_email;
+select * from emp;
+
+-- DROP table
+DROP TABLE emp;
+DESCRIBE COLUMNFAMILIES;
+
+-- CREATE index
+CREATE INDEX name ON emp (emp_name);
+
+-- DROP index
+drop index name;
+
+-- BATCH
+BEGIN BATCH
+INSERT INTO emp (emp_id, emp_city, emp_name, emp_phone, emp_sal) values(  4,'Pune','rajeev',9848022331, 30000);
+UPDATE emp SET emp_sal = 50000 WHERE emp_id =3;
+DELETE emp_city FROM emp WHERE emp_id = 2;
+APPLY BATCH;
+
+select * from emp;
+
+
+/*
+    CURD Operations - Create, Update, Read, Delete
+ */
+
+-- INSERT
+INSERT INTO emp (emp_id, emp_name, emp_city,
+   emp_phone, emp_sal) VALUES(1,'ram', 'Hyderabad', 9848022338, 50000);
+INSERT INTO emp (emp_id, emp_name, emp_city,
+   emp_phone, emp_sal) VALUES(2,'robin', 'Hyderabad', 9848022339, 40000);
+INSERT INTO emp (emp_id, emp_name, emp_city,
+   emp_phone, emp_sal) VALUES(3,'rahman', 'Chennai', 9848022330, 45000);
+SELECT * FROM emp;
+
+-- UPDATE
+UPDATE emp SET emp_city='Delhi',emp_sal=50000
+WHERE emp_id=2;
+select * from emp;
+
+-- READ
+select emp_name from emp;
+
+CREATE INDEX ON emp(emp_sal);
+select * from emp where emp_sal=50000;
+
+-- DELETE
+delete from emp where emp_id=3;
+select * from emp;
+
+
+/*
+    CQL Collections
+ */
+
+-- LIST
+CREATE TABLE data(name text PRIMARY KEY, email list<text>);
+INSERT INTO data(name, email) VALUES ('ramu', ['abc@gmail.com','cba@yahoo.com']);
+UPDATE data SET email = email +['xyz@tutorialspoint.com'] where name = 'ramu';
+
+select  * from data;
+
+-- SET
+CREATE TABLE data2 (name text PRIMARY KEY, phone set<varint>);
+INSERT INTO data2(name, phone)VALUES ('rahman', {9848022338,9848022339});
+UPDATE data2 SET phone = phone + {9848022330} where name = 'rahman';
+
+select * from data2;
+
+-- MAP
+CREATE TABLE data3 (name text PRIMARY KEY, address map<timestamp, text>);
+INSERT INTO data3 (name, address) VALUES ('robin', {'home' : 'hyderabad' , 'office' : 'Delhi' } );
+UPDATE data3 SET address = address+{'office':'mumbai'} WHERE name = 'robin';
+
+select * from data3;
+
+-- User-defined Data Type
+CREATE TYPE card_details (num int, pin int, name text, cvv int, phone set<int>);
+ALTER TYPE card_details ADD email text;
+ALTER TYPE card_details RENAME email TO mail;
+drop type card_details;
+
+describe type card_details;
+
+

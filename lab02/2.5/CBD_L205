@@ -1,0 +1,44 @@
+Dataset desenvolvido para efeitos de teste. Toda a geração do ficheiro data.json encontra-se no ficheiro app.py
+
+Tem caracteristicas basicas de bicicletas, com a seguinte estrutura
+
+{
+    "id_bike": identificador,
+    "name": nome,
+    "price": preço,
+    "specs":{
+        "model": modelo,
+        "size": tamanho,
+        "material": material do quadro
+    }
+}
+
+
+# Find
+
+1. Quantas bicicletas para crianças existem?
+db.bikes.find({"specs.model": {$eq: "kids"}}).count()
+->20547
+
+2. Quantas bicicletas custam mais de 1000€ e cujo o modelo é de montanha?
+db.bikes.find({"specs.model": {$eq: "montanha"}, "price": {$gt: 1000}}).count()
+->16811
+
+3. Quantas bicicletas existem para o tamanho S ou M?
+db.bikes.find({"specs.size": {$in: ["S", "M"]}}).count()
+->54964
+
+
+# Aggregation
+
+1. Biclicletas por ordem descrescente de preço
+db.bikes.aggregate({$sort: {"price": -1}})
+
+1. Qual é o preço da bicicleta mais cara?
+db.bikes.aggregate([{$sort: {price: -1}}, {$limit: 1}, {$project: {nome: 1, price: 1,  _id: 0}}])
+->5000
+
+3. Quantas bicicletas do tipo active existem?
+db.bikes.aggregate([{$match: {"specs.model": "active"}}, {$group: {"_id": "$name"}}, {$count: "counter"}])
+->20556
+

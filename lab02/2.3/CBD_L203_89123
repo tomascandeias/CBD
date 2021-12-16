@@ -1,0 +1,11 @@
+c)
+db.phones.aggregate([{$group: {_id: "$components.prefix", counter: {$sum: 1}}}])
+[
+  { _id: 234, counter: 33280 },
+  { _id: 233, counter: 33148 },
+  { _id: 21, counter: 33405 },
+  { _id: 22, counter: 33356 },
+  { _id: 231, counter: 33403 },
+  { _id: 232, counter: 33408 }
+]
+

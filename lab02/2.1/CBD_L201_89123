@@ -1,0 +1,130 @@
+MongoDB is document oriented database that provides high performance, high availability, and easy scalability. Works on the concept of collection and document.  
+
+Collection: group of MongoDB documents.  
+Document: set of key-value pairs.  
+
+Data Types: string, int, bool, double, min/max keys, arrays, timestamp, obj, null, symbol, date, obj id, binary daata, code, regex
+
+
+Start the mongod process:  
+$ sudo systemctl start mongod  
+If you receive an error do -> $ sudo systemctl daemon-reload  
+
+Verify that MongoDB has started successfully:  
+$ sudo systemctl status mongod  
+
+Stop MongoDB:  
+$ sudo systemctl stop mongod  
+
+Restart MongoDB:  
+$ sudo systemctl restart mongod  
+
+Begin using MongoDB:  
+$ mongosh  
+
+### COMMANDS ###
+Enter MongoDB Shell:
+$ mogosh
+
+CREATE db:
+$ use <name>
+
+DROP db:
+$ db.dropDataBase()
+
+SHOW db list:
+$ show dbs
+
+
+CREATE collection:
+$ db.createCollection(name, options)
+$ db.createCollection("log", { capped : true, size : 5242880, max : 5000 } )
+
+DROP collection:
+$ db.COLLECTION_NAME.drop()
+
+INSERT ONE document:
+$ db.COLLECTION_NAME.insertOne(doc)
+INSERT MANY documents:
+$ db.COLLECTION_NAME.insertMany([doc1, doc2, ...])
+
+
+FIND data:
+$ db.COLLECTION_NAME.find(<where>, <select>)
+$ db.COLLECTION_NAME.find({}, {nome:1, _id:0})
+$ db.COLLECTION_NAME.findOne({nome: "tomas"})
+Note: When you execute find() method, then it displays all fields of a document. To limit this, you need to set a list of fields with value 1 or 0. 1 is used to show the field while 0 is used to hide the fields.
+
+
+FIND with Where Clause:
+Equality				{<key>:{$eq;<value>}}
+Less Than				{<key>:{$lt:<value>}}
+Less Than Equals		{<key>:{$lte:<value>}}
+Greater Than			{<key>:{$gt:<value>}}
+Greater Than Equals		{<key>:{$gte:<value>}}
+Not Equals				{<key>:{$ne:<value>}}
+Values in an array		{<key>:{$in:[<value1>, <value2>,……<valueN>]}}
+Values not in an array	{<key>:{$nin:<value>}}
+
+
+$ db.mycol.find({$and:[{"age":21}]}).pretty()
+
+
+UPDATE the values of a doc:
+$ db.COLLECTION_NAME.update(SELECTION_CRITERIA, UPDATED_DATA)
+$ db.mycol.update({"name":"tomas2"},{$set:{"name":"t2"}}, {multi:true}) --multi true in order to update multiple docs
+
+FIND ONE and UPDATE:
+$ db.COLLECTION_NAME.findOneAndUpdate(SELECTIOIN_CRITERIA, UPDATED_DATA)
+$ db.mycol.findOneAndUpdate({name:"t2"},{$set:{name:"afonso", age:22}})
+
+UPDATE ONE:
+$ db.COLLECTION_NAME.updateOne(<filter>, <update>)
+
+UPDATE MANY:
+$ db.COLLECTION_NAME.update(<filter>, <update>)
+
+DELETE value(s) in a doc:
+$ db.COLLECTION_NAME.remove(DELLETION_CRITTERIA, x) --x optional param, represents the number of removes for a certain delletion critteria
+$ db.mycol.remove({"name":"afonso"})
+
+LIMIT:
+$ db.COLLECTION_NAME.find().limit(NUMBER)
+
+SKIP, a number to skip a number of docs:
+$ db.COLLECTION_NAME.find().limit(NUMBER).skip(NUMBER)
+
+SORT:
+$ db.COLLECTION_NAME.find().sort({KEY:1})
+$ db.mycol.find({},{"name":1,_id:0}).sort({"name":-1}) -- -1 descending, 1 ascending
+
+INDEX, create, delete and get:
+$ db.COLLECTION_NAME.createIndex({KEY:1}) -- -1 descending, 1 ascending
+$ db.mycol.createIndex({"title":1,"description":-1})
+
+$ db.COLLECTION_NAME.dropIndex({KEY:1})
+$ db.mycol.dropIndexes({"title":1,"description":-1})
+
+$ db.COLLECTION_NAME.getIndexes()
+
+AGGREGATE:
+$ db.COLLECTION_NAME.aggregate(AGGREGATE_OPERATION)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

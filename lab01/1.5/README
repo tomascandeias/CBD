@@ -1,0 +1,12 @@
+Foram utilizadas 3 estruturas de dados do redis para o desenvolvimento deste Sistema de Mensagens
+
+users:data:<username>
+Contém a informação dita pessoal do <username>, o seu username, password e subscrições
+
+users:subs:<username>
+Contém a lista de todos os utilizadores a que o <username> está subscrito
+
+users:msg:<username>
+Contém a lista de todas as mensagens publicadas pelo <username>
+
+
