@@ -1,0 +1,54 @@
+-- EXERCICIO 3.2
+/*
+ a) create keyspace and tables
+ */
+CREATE KEYSPACE sistema_videos WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 3};
+describe keyspaces;
+
+use sistema_videos;
+CREATE TABLE utilizadores(
+   username text PRIMARY KEY,
+   nome text,
+   email text,
+   data_registo timestamp
+);
+
+CREATE TABLE video(
+    video_id int,
+    autor text,
+    titulo text,
+    descricao text,
+    tags list<text>,
+    data_upload timestamp,
+    primary key (autor, data_upload, video_id)
+)WITH CLUSTERING ORDER BY (data_upload DESC);
+
+CREATE TABLE comentario(
+    comentario_id int,
+    video_id int,
+    data timestamp,
+    autor text,
+    comentario text,
+   primary key(video_id, data, comentario_id)
+)WITH CLUSTERING ORDER BY (data DESC);
+
+CREATE TABLE followers(
+    video_id int PRIMARY KEY ,
+    username text
+);
+
+CREATE TABLE eventos(
+    video_id int ,
+    username text,
+    tipo text,
+    data timestamp,
+    momento int,
+    primary key ((video_id, username), momento)
+)WITH CLUSTERING ORDER BY (momento DESC);
+
+CREATE TABLE ratings(
+    rating_id int,
+    video_id int,
+    rating int,
+    primary key (video_id, rating_id)
+);

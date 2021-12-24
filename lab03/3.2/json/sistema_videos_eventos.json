@@ -1,0 +1,79 @@
+[
+  {
+    "video_id": 6,
+    "username": "catarina98",
+    "momento": 881,
+    "data": "2021-12-01 12:06:00.000",
+    "tipo": "stop"
+  },
+  {
+    "video_id": 6,
+    "username": "catarina98",
+    "momento": 0,
+    "data": "2021-12-01 12:06:00.000",
+    "tipo": "play"
+  },
+  {
+    "video_id": 5,
+    "username": "kapa112",
+    "momento": 965,
+    "data": "2021-12-01 12:05:00.000",
+    "tipo": "stop"
+  },
+  {
+    "video_id": 0,
+    "username": "candeiaspt",
+    "momento": 559,
+    "data": "2021-12-01 12:00:00.000",
+    "tipo": "pause"
+  },
+  {
+    "video_id": 1,
+    "username": "pedropt",
+    "momento": 922,
+    "data": "2021-12-01 12:01:00.000",
+    "tipo": "stop"
+  },
+  {
+    "video_id": 7,
+    "username": "andreia_silva",
+    "momento": 187,
+    "data": "2021-12-01 12:07:00.000",
+    "tipo": "pause"
+  },
+  {
+    "video_id": 8,
+    "username": "andre0w",
+    "momento": 135,
+    "data": "2021-12-01 12:08:00.000",
+    "tipo": "stop"
+  },
+  {
+    "video_id": 2,
+    "username": "candeiaspt",
+    "momento": 448,
+    "data": "2021-12-01 12:02:00.000",
+    "tipo": "pause"
+  },
+  {
+    "video_id": 3,
+    "username": "catarina98",
+    "momento": 11,
+    "data": "2021-12-01 12:03:00.000",
+    "tipo": "pause"
+  },
+  {
+    "video_id": 9,
+    "username": "catarina98",
+    "momento": 496,
+    "data": "2021-12-01 12:09:00.000",
+    "tipo": "stop"
+  },
+  {
+    "video_id": 4,
+    "username": "catarina98",
+    "momento": 369,
+    "data": "2021-12-01 12:04:00.000",
+    "tipo": "stop"
+  }
+]

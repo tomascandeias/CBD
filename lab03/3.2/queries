@@ -1,0 +1,56 @@
+/*
+ c) queries
+ */
+
+// 7. Permitir a pesquisa de todos os vídeos de determinado autor;
+select * from video where autor='tomas123';
+
+// 8. Permitir a pesquisa de comentários por utilizador, ordenado inversamente pela data;
+create index comentario_byautor on comentario(autor);
+select * from comentario where autor='tomas123';
+
+// 9. Permitir a pesquisa de comentários por vídeos, ordenado inversamente pela data;
+select * from comentario where video_id=1;
+
+// 10. Permitir a pesquisa do rating médio de um vídeo e quantas vezes foi votado;
+select avg(rating) as avg_rating, count(rating_id) as votes from ratings where video_id=1;
+
+
+/*
+ d)
+ */
+
+// 1. Os últimos 3 comentários introduzidos para um vídeo;
+select * from comentario where video_id=1 limit 3;
+
+// 2. Lista das tags de determinado vídeo
+select tags from video where video_id=1;
+
+// 3. Todos os vídeos com a tag Aveiro;
+create index video_bytag on video(tags);
+select * from video where tags contains 'Aveiro';
+
+// 4. Os últimos 5 eventos de determinado vídeo realizados por um utilizador;
+select * from eventos where video_id=6 and username='catarina98' limit 5;
+
+// 5. Vídeos partilhados por determinado utilizador (maria1987, por exemplo) num determinado período de tempo (Agosto de 2017, por exemplo);
+select * from video where autor='tomas123' and data_upload>='2021-12-1T12:0' AND data_upload<='2021-12-1T12:10';
+
+// 6. Os últimos 10 vídeos, ordenado inversamente pela data da partilhada;
+-- Este query não é possível visto que os videos são particionados por autor, logo para todos os utilizadores não é possível
+-- É sim possível fazê-lo para um autor em concreto, como por exemplo:
+-- select * from video where autor='tomas123' limit 10;
+
+// 7. Todos os seguidores (followers) de determinado vídeo;
+select * from followers where video_id=1;
+
+// 8. Todos os comentários (dos vídeos) que determinado utilizador está a seguir (following);
+-- Não é possível pois para ser possível seria necessário agregação de tabelas
+
+// 9. Os 5 vídeos com maior rating;
+-- Não é possível obter os 5 vídeos com maior rating pois a pesquisa não iria restringir a chava primária (video_id), apesar de ser possível agrupá-los por video_id
+-- É sim possível fazer a soma dos ratings de cada video:
+-- select video_id, sum(rating) as total_rating from ratings group by video_id;
+
+// 10. Uma query que retorne todos os vídeos e que mostre claramente a forma pela qual estão ordenados;
+select * from video;

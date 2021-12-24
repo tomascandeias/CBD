@@ -1,5 +1,7 @@
 from random import randrange
 
+# Script utilizado como base, alguns insert foram posteriormente alterados ou criados
+
 def insert_user(username, nome, email, data_registo):
     return f"INSERT INTO utilizadores(username, nome, email, data_registo) VALUES(\'{username}\', \'{nome}\', \'{email}\', \'{data_registo}\')"
 
