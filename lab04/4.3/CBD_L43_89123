@@ -1,0 +1,50 @@
+a)
+# Nodes
+Person {num: INT, svn_id: STRING, name: STRING}
+Project {name: STRING}
+Organization {name: STRING}
+
+# Relationships
+Person-[:WORKS_ON {role: STRING}]->Project
+Person-[:MEMBER_OF {num: STRING}]->Organization
+
+b)
+LOAD CSV WITH HEADERS
+FROM 'file:///git_selection.csv' as row
+WITH row WHERE row.num IS NOT NULL and row.svn_id IS NOT NULL and row.real_name IS NOT NULL
+MERGE (person:Person {svn_id: row.svn_id, name: row.real_name})
+MERGE (project:Project {name: row.project_name})
+MERGE (organization:Organization {name: row.organization})
+MERGE (person)-[:WORKS_ON {role: row.role_on_project}]->(project)
+MERGE (person)-[:MEMBER_OF {num: row.num}]->(organization)
+RETURN *;
+
+c)
+#1
+match (p:Person) return p;
+
+#2
+match (p:Person) return p.name;
+
+#3
+match (p:Person)-[:WORKS_ON]->(proj:Project) with proj, count(p) as person_count where person_count>1 return proj;
+
+#4
+match (p:Person)-[:WORKS_ON]->(proj:Project) with p, count(proj) as proj_count return p.name, proj_count;
+
+#5
+match (p:Person)-[:WORKS_ON]->(proj:Project) with p, count(proj) as proj_count return p.name, proj_count order by proj_count DESC;
+
+#6
+match (p:Person)-[:WORKS_ON]->(proj:Project) with proj, count(p) as total_members return proj.name, total_members;
+
+#7
+match (p:Person)-[:WORKS_ON {role: "Committer"}]->(proj:Project) return proj, count(*) as total_committer;
+
+#8
+match (p:Person {svn_id: "atm"})-[:WORKS_ON]->(proj:Project) match (p2:Person)-[:WORKS_ON]->(proj) return p.name, p2.name, proj.name;
+
+#9
+match (p:Person {svn_id: "atm"})-[:WORKS_ON {role: "PMC"}]->(proj:Project) match (p2:Person)-[:WORKS_ON {role: "Committer"}]->(proj) return p.name, p2.name, proj.name;
+
+

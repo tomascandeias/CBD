@@ -1,0 +1,61 @@
+//NMEC: 89123
+
+#1
+match (actor:Person)-[:DIRECTED]->(movie:Movie) match (actor:Person)-[:ACTED_IN]->(movie:Movie) return actor.name;
+
+#2
+match (actor:Person)-[:ACTED_IN]->(movie:Movie) where movie.released>2005 return movie.title;
+
+#3
+match (n1)-[r]-(n2) with distinct n1, n2, count(r) as counter match (n1)-[r]-(n2) where counter>1 return n1, r, n2;
+
+#4
+match (p1:Person)-[:REVIEWED]->(movie:Movie) match(p2:Person)-[:REVIEWED]->(movie:Movie) where p1<>p2 return movie.title, p1.name, p2.name;
+
+#5
+match (actor1:Person)-[:ACTED_IN]->(movie:Movie) match (actor2:Person)-[:ACTED_IN]->(movie:Movie) where actor1<>actor2 return movie.title, actor1.name, actor2.name;
+
+#6
+match (actor:Person)-[:ACTED_IN]->(movie:Movie {title: "Apollo 13"}) return avg(movie.released - actor.born) as avg;
+
+#7
+match (actor:Person)-[:ACTED_IN]->(movie:Movie) return movie.title, avg(movie.released - actor.born) as avg order by avg desc limit 10 ;
+
+#8
+match (actor:Person)-[:ACTED_IN]->(movie:Movie) with movie, min(movie.released-actor.born) as min match (actor:Person)-[:ACTED_IN]->(movie:Movie) where (movie.released-actor.born)=min return movie, actor;
+
+#9
+match (p1:Person {name: "John Cusack"}), (p2:Person {name: "Demi Moore"}) match path=shortestPath((p1)-[*]-(p2)) return path;
+
+#10
+match (p1:Person {name:"Keanu Reeves"}), (p2:Person {name:"Tom Cruise"}) match p=shortestPath((p1)-[*]-(p2)) return length(p);
+
+#11
+match (p1:Person), (p2:Person) where p1.name starts with "Jim" and p2.name starts with "Kevin" match path=shortestPath((p1)-[*]-(p2)) return min(length(path));
+
+#12
+match (p1:Person {name: "Jim Cash"})-[*2]-(p2:Person) return p2.name;
+
+#13
+match (p:Person), (kevin:Person {name: "Kevin Bacon"}) where p<>kevin match path=shortestPath((kevin)-[*]-(p)) return max(length(path));
+
+#14
+match (p1:Person), (p2:Person) where p1<>p2 match path=shortestPath((p1)-[*]-(p2)) return max(length(path));
+
+#15
+match (p1:Person), (p2:Person) where p1<>p2 with shortestPath((p1)-[*]-(p2)) as path with length(path) as len return len, count(*) order by len;
+
+#16
+match (p1:Person), (p2:Person) where p1<>p2 with p1, shortestPath((p1)-[:ACTED_IN*]-(p2)) as path with p1, length(path) as len where len is not null return p1.name, avg(len) as avg_distance order by avg_distance limit 10;
+
+#17 Quando é que foi lançado o filme "The Matrix Revolutions"?
+match (movie:Movie {title:"The Matrix Revolutions"}) return movie.title, movie.released;
+
+#18 Lista de actores que fizeram parte do elenco do "What Dreams May Come"?
+match (actor:Person)-[:ACTED_IN]->(movie:Movie {title: "What Dreams May Come"}) return actor.name;
+
+#19 Qual é a distância minima entre das pessoas
+match (p1:Person), (p2:Person) where p1<>p2 match path=shortestPath((p1)-[*]-(p2)) return min(length(path));
+
+#20 Quantos filmes foram lançados no século passado, ou seja, antes de 2000?
+match (m:Movie) where m.released<2001 return count(*);

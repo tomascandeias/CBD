@@ -1,0 +1,52 @@
+# Nodes
+Pokemon: {number: INTEGER, name: STRING, total: INTEGER, hp: INTEGER, attack: INTEGER, defense: INTEGER, Sp.Atk: INTEGER, Sp.Def: INTEGER, Speed: INTEGER}
+Type: {type: STRING}
+Generation: {number: INTEGER}
+
+# Relationships
+Pokemon-[:MEMBER_OF_GEN]->Generation
+Pokemon-[:Type]->Type
+
+
+# Insert POKEMONS
+LOAD CSV WITH HEADERS
+FROM 'file:///pokemon.csv' as row
+MERGE (pokemon:Pokemon {name: row.Name})
+SET pokemon.number=row.Entry, pokemon.total=row.Total, pokemon.hp=row.HP, pokemon.attack=row.Attack, pokemon.defense=row.Defense, pokemon.spatk=row.Sp.Atk, pokemon.spdef=row.Sp.Def, pokemon.speed=row.Speed
+
+# Insert TYPES
+LOAD CSV WITH HEADERS
+FROM 'file:///pokemon.csv' as row
+WITH row WHERE row.Type1 IS NOT NULL
+MERGE (type:Type {type: row.Type1})
+
+LOAD CSV WITH HEADERS
+FROM 'file:///pokemon.csv' as row
+WITH row WHERE row.Type2 IS NOT NULL
+MERGE (type:Type {type: row.Type2})
+
+
+# Insert GENERATIONS
+LOAD CSV WITH HEADERS
+FROM 'file:///pokemon.csv' as row
+MERGE (gen:Generation {number: row.Generation})
+
+
+# Insert REL TYPE
+LOAD CSV WITH HEADERS
+FROM 'file:///pokemon.csv' as row
+MATCH (pokemon:Pokemon {name: row.Name}),(type:Type) CREATE (pokemon)-[:Type]->(type)
+
+# Insert REL MEMBER_OF_GEN
+LOAD CSV WITH HEADERS
+FROM 'file:///pokemon.csv' as row
+MATCH (pokemon:Pokemon {name: row.Name}),(gen:Generation {number: row.Generation}) CREATE (pokemon)-[:MEMBER_OF_GEN]->(gen)
+
+
+
+
+
+
+
+
+
